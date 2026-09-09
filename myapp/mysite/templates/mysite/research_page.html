@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedResearch AI — Ask a question</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1F0E8;
+    --paper-warm:#EAE8DC;
+    --card:#FBFBF7;
+    --ink:#182420;
+    --ink-soft:#4A554F;
+    --rule:#CBC9B9;
+    --rule-strong:#9FA091;
+    --teal:#2F6E5F;
+    --teal-deep:#1F4A40;
+    --amber:#AD6B2C;
+    --red-flag:#9A4630;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--teal);color:var(--paper);}
+  a{color:inherit;}
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:3px;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 40px;}
+  @media (max-width:600px){.wrap{padding:0 20px;}}
+
+  /* ---------- Masthead ---------- */
+  header.masthead{
+    border-bottom:1px solid var(--rule);
+    padding:22px 0;
+  }
+  .masthead-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    text-decoration:none;
+  }
+  .brand-mark{width:24px;height:24px;flex:none;}
+  .brand-name{
+    font-family:'Source Serif 4', serif;
+    font-size:19px;
+    font-weight:600;
+  }
+  .masthead-note{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  @media (max-width:600px){.masthead-note{display:none;}}
+
+  main{padding:56px 0 90px;}
+
+  .eyebrow-line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--teal-deep);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    margin-bottom:16px;
+  }
+  .eyebrow-line .rule{width:28px;height:1px;background:var(--teal-deep);}
+
+  h1.page-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:500;
+    font-size:clamp(26px, 4vw, 34px);
+    line-height:1.2;
+    margin:0 0 34px;
+    max-width:20ch;
+  }
+
+  /* ---------- Search card ---------- */
+  .query-card{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:44px;
+  }
+  .query-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 18px;
+    border-bottom:1px solid var(--rule);
+    background:var(--paper-warm);
+  }
+  .query-dot{width:7px;height:7px;border-radius:50%;background:var(--rule-strong);}
+  .query-head-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:0.02em;
+  }
+  .query-body{padding:24px 22px;}
+  .field-label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .query-row{
+    display:flex;
+    gap:10px;
+  }
+  input[name="med_question"]{
+    flex:1;
+    font-family:'Source Serif 4', serif;
+    font-size:16px;
+    color:var(--ink);
+    background:var(--paper);
+    border:1px solid var(--rule);
+    border-radius:3px;
+    padding:13px 14px;
+  }
+  input[name="med_question"]::placeholder{color:var(--rule-strong);font-style:italic;}
+  input[name="med_question"]:focus{
+    border-color:var(--teal);
+  }
+  #med_question_btn{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:15px;
+    font-weight:500;
+    color:var(--paper);
+    background:var(--teal-deep);
+    border:none;
+    border-radius:3px;
+    padding:0 22px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  #med_question_btn:hover{background:#153B33;}
+  @media (max-width:520px){
+    .query-row{flex-direction:column;}
+  }
+
+  /* ---------- Answer ---------- */
+  .answer-card{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:28px;
+    position:relative;
+  }
+  .answer-card::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;bottom:0;
+    width:3px;
+    background:var(--teal);
+  }
+  .answer-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:12px 22px 12px 25px;
+    border-bottom:1px solid var(--rule);
+    background:var(--paper-warm);
+  }
+  .answer-head-left{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .answer-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+  .answer-head-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:0.02em;
+  }
+  .answer-timestamp{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--rule-strong);
+  }
+  .answer-body{padding:30px 26px 24px 25px;}
+  .answer-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--teal-deep);
+    letter-spacing:0.02em;
+    margin-bottom:16px;
+    display:block;
+  }
+  .answer-text{
+    font-family:'Source Serif 4', serif;
+    font-size:18px;
+    line-height:1.75;
+    color:var(--ink);
+    max-width:60ch;
+  }
+  .answer-text p{margin:0 0 18px;}
+  .answer-text strong{
+    font-weight:600;
+    color:var(--teal-deep);
+  }
+  .answer-text p:last-child{margin-bottom:0;}
+  .answer-text p:first-of-type::first-letter{
+    font-size:2.9em;
+    font-weight:600;
+    float:left;
+    line-height:0.85;
+    padding-right:8px;
+    padding-top:4px;
+    color:var(--teal-deep);
+  }
+  .cite-link{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--teal-deep);
+    background:var(--paper-warm);
+    border:1px solid var(--teal);
+    border-radius:8px;
+    padding:0 5px;
+    text-decoration:none;
+    vertical-align:super;
+    margin:0 1px;
+    white-space:nowrap;
+    transition:background .15s ease, color .15s ease;
+  }
+  .cite-link:hover{background:var(--teal);color:var(--paper);}
+  .answer-footer{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:24px;
+    padding-top:18px;
+    border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink-soft);
+  }
+  .answer-footer a{
+    color:var(--teal-deep);
+    text-decoration:none;
+    border-bottom:1px solid var(--teal);
+  }
+  .answer-footer a:hover{color:var(--teal-deep);}
+  .paper-item.is-highlighted{
+    background:var(--paper-warm);
+    transition:background 1.4s ease;
+  }
+
+  /* ---------- Toggle button ---------- */
+  .papers-toggle{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:none;
+    border:1px solid var(--rule-strong);
+    border-radius:3px;
+    padding:11px 18px;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14.5px;
+    font-weight:500;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+    margin-bottom:8px;
+  }
+  .papers-toggle:hover{
+    border-color:var(--teal);
+    background:var(--paper-warm);
+  }
+  .papers-toggle .count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--teal-deep);
+    background:var(--card);
+    border:1px solid var(--teal);
+    border-radius:10px;
+    padding:1px 8px;
+  }
+  .papers-toggle .chevron{
+    display:inline-block;
+    width:8px;height:8px;
+    border-right:1.5px solid var(--ink-soft);
+    border-bottom:1.5px solid var(--ink-soft);
+    transform:rotate(45deg);
+    transition:transform .15s ease;
+  }
+  .papers-toggle[aria-expanded="true"] .chevron{
+    transform:rotate(-135deg);
+  }
+
+  /* ---------- Papers list ---------- */
+  #papers-panel{
+    margin-top:24px;
+    border-top:1px solid var(--rule);
+    padding-top:8px;
+  }
+  #papers-panel[hidden]{display:none;}
+  .paper-item{
+    padding:22px 0;
+    border-bottom:1px solid var(--rule);
+  }
+  .paper-item:last-child{border-bottom:none;}
+  .paper-index{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--teal-deep);
+    display:block;
+    margin-bottom:8px;
+  }
+  .paper-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:500;
+    font-size:17px;
+    line-height:1.4;
+    margin:0 0 10px;
+  }
+  .paper-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 16px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+  }
+  .paper-meta span strong{
+    color:var(--ink);
+    font-weight:500;
+  }
+  .paper-meta a{
+    color:var(--teal-deep);
+    text-decoration:none;
+    border-bottom:1px solid var(--teal);
+  }
+  .paper-meta a:hover{color:var(--teal-deep);}
+  .paper-abstract{
+    font-size:14px;
+    line-height:1.65;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:64ch;
+  }
+
+  /* ---------- Empty state ---------- */
+  .empty-note{
+    font-size:14px;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+
+  /* ---------- Disclaimer ---------- */
+  .disclaimer{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    background:var(--paper-warm);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    padding:16px 18px;
+    margin-top:48px;
+  }
+  .disclaimer-mark{
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    font-size:20px;
+    color:var(--amber);
+    flex:none;
+    line-height:1;
+  }
+  .disclaimer p{
+    margin:0;
+    font-size:13px;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+  .disclaimer strong{color:var(--ink);font-weight:600;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead-row">
+    <a href="/" class="brand">
+      <svg class="brand-mark" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 3 C6 9, 20 9, 20 15 C20 21, 6 21, 6 23" stroke="#2F6E5F" stroke-width="1.6" fill="none"/>
+        <path d="M20 3 C20 9, 6 9, 6 15 C6 21, 20 21, 20 23" stroke="#182420" stroke-width="1.6" fill="none"/>
+      </svg>
+      <span class="brand-name">MedResearch AI</span>
+    </a>
+    <span class="masthead-note">RETRIEVAL-AUGMENTED RESEARCH</span>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="eyebrow-line"><span class="rule"></span>New query</div>
+    <h1 class="page-title">Ask a medical research question</h1>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="query-card">
+        <div class="query-head">
+          <span class="query-dot"></span>
+          <span class="query-head-label">query.md</span>
+        </div>
+        <div class="query-body">
+          <label class="field-label" for="id_med_question">QUESTION</label>
+          <div class="query-row">
+            <input id="id_med_question" name="med_question" type="text" placeholder="e.g. Does metformin reduce cardiovascular risk in non-diabetic patients?">
+            <button type="submit" id="med_question_btn">Search</button>
+          </div>
+        </div>
+      </div>
+
+      {% if response %}
+      <div class="answer-card">
+        <div class="answer-head">
+          <div class="answer-head-left">
+            <span class="answer-dot"></span>
+            <span class="answer-head-label">answer.md</span>
+          </div>
+          <span class="answer-timestamp">{% now "M j, Y — g:i A" %}</span>
+        </div>
+        <div class="answer-body">
+          <span class="answer-eyebrow">SYNTHESIZED FROM {{ articles|length|default:"0" }} SOURCE{{ articles|length|pluralize }}</span>
+          <div class="answer-text" id="answer-text">{{ response|linebreaks }}</div>
+
+          {% if articles %}
+          <div class="answer-footer">
+            <span>Every numbered marker links to its source below.</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if articles %}
+      <button type="button" class="papers-toggle" id="papers-toggle" aria-expanded="false" aria-controls="papers-panel">
+        <span class="chevron"></span>
+        Show research papers
+        <span class="count">{{ articles|length }}</span>
+      </button>
+
+      <div id="papers-panel" hidden>
+        {% for article in articles %}
+        <div class="paper-item" id="paper-{{ forloop.counter }}">
+          <span class="paper-index">{{ forloop.counter }}</span>
+          <h3 class="paper-title">{{ article.title }}</h3>
+          <div class="paper-meta">
+            <span><strong>Journal:</strong> {{ article.journal }}</span>
+            <span><strong>Authors:</strong> {{ article.authors|join:", " }}</span>
+            <span><strong>PMID:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/{{ article.pmid }}/" target="_blank" rel="noopener">{{ article.pmid }}</a></span>
+          </div>
+          <p class="paper-abstract">{{ article.abstract }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty-note">No supporting papers were returned for this answer.</p>
+      {% endif %}
+
+      <div class="disclaimer">
+        <span class="disclaimer-mark">!</span>
+        <p><strong>Research tool only.</strong> This is not a medical device or a substitute for a qualified healthcare professional. Do not use it to make clinical decisions.</p>
+      </div>
+      {% endif %}
+    </form>
+  </div>
+</main>
+
+<script>
+  (function(){
+    var toggle = document.getElementById('papers-toggle');
+    var panel = document.getElementById('papers-panel');
+
+    function openPanel(){
+      if(!toggle || !panel) return;
+      toggle.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+      toggle.childNodes[2].nodeValue = ' Hide research papers ';
+    }
+
+    if(toggle && panel){
+      toggle.addEventListener('click', function(){
+        var expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        panel.hidden = expanded;
+        toggle.childNodes[2].nodeValue = expanded ? ' Show research papers ' : ' Hide research papers ';
+      });
+    }
+
+    // Turn [1], [2]... markers inside the answer text into links to their source.
+    var answer = document.getElementById('answer-text');
+    if(answer){
+      // Convert markdown-style **bold** into real <strong> emphasis, and drop any
+      // leftover stray "**" that isn't part of a matched pair.
+      answer.innerHTML = answer.innerHTML
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*\*/g, '');
+
+      var walker = document.createTreeWalker(answer, NodeFilter.SHOW_TEXT, null);
+      var textNodes = [];
+      var node;
+      while((node = walker.nextNode())) textNodes.push(node);
+
+      textNodes.forEach(function(textNode){
+        var text = textNode.nodeValue;
+        if(!/\[\d+\]/.test(text)) return;
+
+        var frag = document.createDocumentFragment();
+        var lastIndex = 0;
+        var re = /\[(\d+)\]/g;
+        var match;
+        while((match = re.exec(text))){
+          var target = document.getElementById('paper-' + match[1]);
+          if(target){
+            frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+            var link = document.createElement('a');
+            link.className = 'cite-link';
+            link.href = '#paper-' + match[1];
+            link.textContent = match[1];
+            link.addEventListener('click', function(e){
+              e.preventDefault();
+              var id = this.getAttribute('href').slice(1);
+              var el = document.getElementById(id);
+              if(!el) return;
+              openPanel();
+              var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              el.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'center'});
+              el.classList.add('is-highlighted');
+              setTimeout(function(){ el.classList.remove('is-highlighted'); }, 1600);
+            });
+            frag.appendChild(link);
+            lastIndex = match.index + match[0].length;
+          }
+        }
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+        textNode.parentNode.replaceChild(frag, textNode);
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>

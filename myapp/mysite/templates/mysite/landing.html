@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedResearch AI — Evidence, not guesswork</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1F0E8;
+    --paper-warm:#EAE8DC;
+    --card:#FBFBF7;
+    --ink:#182420;
+    --ink-soft:#4A554F;
+    --rule:#CBC9B9;
+    --rule-strong:#9FA091;
+    --teal:#2F6E5F;
+    --teal-deep:#1F4A40;
+    --amber:#AD6B2C;
+    --red-flag:#9A4630;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--teal);color:var(--paper);}
+  a{color:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+  @media (max-width:720px){.wrap{padding:0 20px;}}
+
+  /* ---------- Focus ---------- */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:3px;
+  }
+
+  /* ---------- Masthead ---------- */
+  header.masthead{
+    border-bottom:1px solid var(--rule);
+    padding:22px 0;
+  }
+  .masthead-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    text-decoration:none;
+  }
+  .brand-mark{
+    width:26px;height:26px;flex:none;
+  }
+  .brand-name{
+    font-family:'Source Serif 4', serif;
+    font-size:20px;
+    font-weight:600;
+    letter-spacing:0.01em;
+  }
+  nav.masthead-nav{
+    display:flex;
+    gap:32px;
+    font-size:15px;
+  }
+  nav.masthead-nav a{
+    text-decoration:none;
+    color:var(--ink-soft);
+    border-bottom:1px solid transparent;
+    padding-bottom:2px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  nav.masthead-nav a:hover{
+    color:var(--ink);
+    border-bottom-color:var(--ink);
+  }
+  .nav-cta{
+    font-size:15px;
+    text-decoration:none;
+    color:var(--paper);
+    background:var(--ink);
+    padding:9px 18px;
+    border-radius:3px;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{background:var(--teal-deep);}
+  @media (max-width:720px){
+    nav.masthead-nav{display:none;}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:76px 0 88px;
+    border-bottom:1px solid var(--rule);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:64px;
+    align-items:start;
+  }
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:48px;}
+  }
+  .eyebrow-line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--teal-deep);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    margin-bottom:22px;
+  }
+  .eyebrow-line .rule{
+    width:34px;height:1px;background:var(--teal-deep);
+  }
+  h1.hero-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:500;
+    font-size:clamp(34px, 4.4vw, 52px);
+    line-height:1.12;
+    margin:0 0 24px;
+    max-width:14ch;
+  }
+  h1.hero-title em{
+    font-style:italic;
+    color:var(--teal-deep);
+  }
+  .hero-sub{
+    font-size:18px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    max-width:46ch;
+    margin:0 0 34px;
+  }
+  .hero-actions{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex-wrap:wrap;
+  }
+  .btn-primary{
+    display:inline-block;
+    background:var(--teal-deep);
+    color:var(--paper);
+    text-decoration:none;
+    font-size:15px;
+    font-weight:500;
+    padding:13px 24px;
+    border-radius:3px;
+    transition:background .15s ease;
+  }
+  .btn-primary:hover{background:#153B33;}
+  .btn-text{
+    font-size:14px;
+    color:var(--ink-soft);
+    text-decoration:none;
+    border-bottom:1px solid var(--rule-strong);
+    padding-bottom:1px;
+  }
+  .btn-text:hover{color:var(--ink);border-color:var(--ink);}
+
+  /* ---------- Hero demo card ---------- */
+  .demo-card{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .demo-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 18px;
+    border-bottom:1px solid var(--rule);
+    background:var(--paper-warm);
+  }
+  .demo-dot{width:7px;height:7px;border-radius:50%;background:var(--rule-strong);}
+  .demo-head-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:0.02em;
+  }
+  .demo-body{padding:22px 22px 8px;}
+  .demo-q{
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:0 0 6px;
+  }
+  .demo-q strong{color:var(--ink);font-weight:500;}
+  .demo-answer{
+    font-family:'Source Serif 4', serif;
+    font-size:15.5px;
+    line-height:1.65;
+    color:var(--ink);
+    margin:14px 0 18px;
+    padding-top:14px;
+    border-top:1px dashed var(--rule);
+  }
+  .cite{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--teal-deep);
+    vertical-align:super;
+    padding:0 1px;
+  }
+  .evidence-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 22px;
+    border-top:1px solid var(--rule);
+    background:var(--paper-warm);
+  }
+  .evidence-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:0.03em;
+  }
+  .evidence-meter{
+    display:flex;
+    gap:3px;
+  }
+  .evidence-meter span{
+    width:16px;height:6px;background:var(--rule-strong);border-radius:1px;
+  }
+  .evidence-meter span.on{background:var(--teal);}
+  .sources-list{
+    padding:14px 22px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .source-item{
+    display:flex;
+    gap:10px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    align-items:baseline;
+  }
+  .source-item .n{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--teal-deep);
+    flex:none;
+    width:16px;
+  }
+
+  /* ---------- Section shared ---------- */
+  section{padding:76px 0;border-bottom:1px solid var(--rule);}
+  section:last-of-type{border-bottom:none;}
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:40px;
+    margin-bottom:48px;
+  }
+  .section-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  h2.section-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:500;
+    font-size:clamp(26px, 3vw, 34px);
+    margin:6px 0 0;
+    max-width:20ch;
+  }
+  .section-note{
+    max-width:34ch;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    line-height:1.55;
+    text-align:right;
+  }
+  @media (max-width:760px){
+    .section-head{flex-direction:column;align-items:flex-start;}
+    .section-note{text-align:left;}
+  }
+
+  /* ---------- Manifesto ---------- */
+  .manifesto-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+  }
+  @media (max-width:760px){.manifesto-grid{grid-template-columns:1fr;}}
+  .manifesto-col p{
+    font-size:15.5px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    max-width:42ch;
+  }
+  .manifesto-col h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    font-weight:500;
+    margin:0 0 14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .manifesto-col.no h3{color:var(--red-flag);}
+  .manifesto-col.yes h3{color:var(--teal-deep);}
+  .swatch{width:8px;height:8px;border-radius:50%;}
+  .no .swatch{background:var(--red-flag);}
+  .yes .swatch{background:var(--teal);}
+  .manifesto-col ul{
+    list-style:none;
+    margin:16px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .manifesto-col li{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    padding-left:16px;
+    position:relative;
+    line-height:1.5;
+  }
+  .no li::before{content:"×";position:absolute;left:0;color:var(--red-flag);}
+  .yes li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-size:12px;top:2px;}
+
+  /* ---------- Protocol / how it works ---------- */
+  .protocol{
+    border-top:1px solid var(--rule);
+  }
+  .protocol-step{
+    display:grid;
+    grid-template-columns:64px 1fr 1.2fr;
+    gap:28px;
+    padding:26px 0;
+    border-bottom:1px solid var(--rule);
+    align-items:baseline;
+  }
+  @media (max-width:760px){
+    .protocol-step{grid-template-columns:40px 1fr;}
+    .protocol-step .protocol-desc{grid-column:1 / -1;padding-left:40px;}
+  }
+  .protocol-index{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:var(--teal-deep);
+  }
+  .protocol-name{
+    font-family:'Source Serif 4', serif;
+    font-size:19px;
+    font-weight:500;
+  }
+  .protocol-desc{
+    font-size:14.5px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    max-width:52ch;
+  }
+
+  /* ---------- Evidence table (features) ---------- */
+  .evidence-table{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--rule);
+    border:1px solid var(--rule);
+  }
+  @media (max-width:760px){.evidence-table{grid-template-columns:1fr;}}
+  .evidence-cell{
+    background:var(--card);
+    padding:28px 30px;
+  }
+  .evidence-cell h4{
+    font-family:'Source Serif 4', serif;
+    font-size:18px;
+    font-weight:500;
+    margin:0 0 10px;
+  }
+  .evidence-cell p{
+    font-size:14px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:40ch;
+  }
+  .tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--teal-deep);
+    border:1px solid var(--teal);
+    border-radius:2px;
+    padding:2px 6px;
+    margin-bottom:12px;
+  }
+
+  /* ---------- History mock ---------- */
+  .history-wrap{
+    display:grid;
+    grid-template-columns:0.85fr 1.15fr;
+    gap:56px;
+    align-items:center;
+  }
+  @media (max-width:900px){.history-wrap{grid-template-columns:1fr;}}
+  .history-copy p{
+    font-size:15.5px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    max-width:42ch;
+  }
+  .history-panel{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+  }
+  .history-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 20px;
+    border-bottom:1px solid var(--rule);
+    font-size:13.5px;
+  }
+  .history-row:last-child{border-bottom:none;}
+  .history-q{color:var(--ink);}
+  .history-meta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .strength-dot{width:6px;height:6px;border-radius:50%;}
+  .strength-dot.strong{background:var(--teal);}
+  .strength-dot.mixed{background:var(--amber);}
+  .strength-dot.limited{background:var(--red-flag);}
+
+  /* ---------- Disclaimer band ---------- */
+  .disclaimer{
+    background:var(--paper-warm);
+    border-top:1px solid var(--rule-strong);
+    border-bottom:1px solid var(--rule-strong);
+    padding:40px 0;
+  }
+  .disclaimer-row{
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+  }
+  .disclaimer-mark{
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    font-size:26px;
+    color:var(--amber);
+    flex:none;
+    line-height:1;
+  }
+  .disclaimer-text p{
+    margin:0;
+    font-size:14.5px;
+    line-height:1.65;
+    color:var(--ink-soft);
+    max-width:70ch;
+  }
+  .disclaimer-text strong{color:var(--ink);font-weight:600;}
+
+  /* ---------- Closing CTA ---------- */
+  .closing{
+    padding:90px 0;
+    text-align:left;
+  }
+  .closing-inner{
+    max-width:640px;
+  }
+  h2.closing-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:500;
+    font-size:clamp(28px, 4vw, 40px);
+    line-height:1.2;
+    margin:0 0 20px;
+  }
+  .closing p{
+    font-size:16px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin:0 0 30px;
+    max-width:48ch;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    padding:32px 0 40px;
+  }
+  .footer-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer-brand{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .footer-links{
+    display:flex;
+    gap:24px;
+    font-size:13px;
+  }
+  .footer-links a{text-decoration:none;color:var(--ink-soft);}
+  .footer-links a:hover{color:var(--ink);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead-row">
+    <a href="#" class="brand">
+      <svg class="brand-mark" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 3 C6 9, 20 9, 20 15 C20 21, 6 21, 6 23" stroke="#2F6E5F" stroke-width="1.6" fill="none"/>
+        <path d="M20 3 C20 9, 6 9, 6 15 C6 21, 20 21, 20 23" stroke="#182420" stroke-width="1.6" fill="none"/>
+      </svg>
+      <span class="brand-name">MedResearch AI</span>
+    </a>
+    <nav class="masthead-nav">
+      <a href="#how">How it works</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#history">History</a>
+      <a href="#about">About</a>
+    </nav>
+    <a href="#" class="nav-cta">Sign in</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow-line"><span class="rule"></span>Retrieval-augmented research</div>
+      <h1 class="hero-title">Ask the question. <em>Read the evidence,</em> not a guess.</h1>
+      <p class="hero-sub">MedResearch AI searches the medical literature before it answers, then shows you exactly which studies support each claim — including where they disagree.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Start a search</a>
+        <a href="#how" class="btn-text">See how it works</a>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-head">
+        <span class="demo-dot"></span>
+        <span class="demo-head-label">query_result.md</span>
+      </div>
+      <div class="demo-body">
+        <p class="demo-q"><strong>Q —</strong> Does metformin reduce cardiovascular risk in non-diabetic patients?</p>
+        <p class="demo-answer">
+          Evidence is mixed. Trials in insulin-resistant, non-diabetic adults show modest reductions in cardiovascular event markers<span class="cite">1</span>, but effect sizes are smaller than in diabetic cohorts and vary by baseline risk<span class="cite">2</span>. Two studies report no significant benefit over lifestyle intervention alone<span class="cite">3</span>.
+        </p>
+      </div>
+      <div class="evidence-row">
+        <span class="evidence-label">EVIDENCE STRENGTH</span>
+        <div class="evidence-meter">
+          <span class="on"></span><span class="on"></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="sources-list">
+        <div class="source-item"><span class="n">1</span><span>Lancet Diabetes Endocrinol., cohort study, n=2,414</span></div>
+        <div class="source-item"><span class="n">2</span><span>J Am Coll Cardiol., meta-analysis, 9 trials</span></div>
+        <div class="source-item"><span class="n">3</span><span>Diabetes Care, randomized trial, n=683</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-num">01 — Why retrieval</div>
+        <h2 class="section-title">A language model's memory is not a literature review.</h2>
+      </div>
+      <p class="section-note">Generated answers drift from what was actually published. Retrieval keeps the system anchored to sources you can check yourself.</p>
+    </div>
+
+    <div class="manifesto-grid">
+      <div class="manifesto-col no">
+        <h3><span class="swatch"></span>Asking a model from memory</h3>
+        <p>Confident wording, no way to trace a claim back to a study — and no signal when the field genuinely disagrees.</p>
+        <ul>
+          <li>Answers can't be traced to a source</li>
+          <li>No indication of study quality</li>
+          <li>Conflicting findings get flattened into one answer</li>
+          <li>Training data goes stale</li>
+        </ul>
+      </div>
+      <div class="manifesto-col yes">
+        <h3><span class="swatch"></span>Asking MedResearch AI</h3>
+        <p>Every response is built from literature retrieved for that question, with the evidence shown alongside the synthesis.</p>
+        <ul>
+          <li>Claims are linked to the papers behind them</li>
+          <li>Study design and sample size are surfaced</li>
+          <li>Disagreement between studies is shown, not hidden</li>
+          <li>Search runs against current literature</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-num">02 — Method</div>
+        <h2 class="section-title">From question to cited answer</h2>
+      </div>
+      <p class="section-note">Five steps, run for every query — nothing is answered from memory alone.</p>
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-step">
+        <span class="protocol-index">01</span>
+        <span class="protocol-name">Question</span>
+        <span class="protocol-desc">You submit a research question in plain language — no special query syntax required.</span>
+      </div>
+      <div class="protocol-step">
+        <span class="protocol-index">02</span>
+        <span class="protocol-name">Retrieval</span>
+        <span class="protocol-desc">The system searches medical literature and identifies papers relevant to the question, ranked for relevance.</span>
+      </div>
+      <div class="protocol-step">
+        <span class="protocol-index">03</span>
+        <span class="protocol-name">Reading</span>
+        <span class="protocol-desc">Retrieved papers are parsed for findings, methodology, sample size, and stated limitations.</span>
+      </div>
+      <div class="protocol-step">
+        <span class="protocol-index">04</span>
+        <span class="protocol-name">Synthesis</span>
+        <span class="protocol-desc">An LLM combines the retrieved evidence into a structured answer — it does not add claims the sources don't support.</span>
+      </div>
+      <div class="protocol-step">
+        <span class="protocol-index">05</span>
+        <span class="protocol-name">Citation</span>
+        <span class="protocol-desc">Every claim in the final answer links back to the specific source it came from, so you can verify it directly.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="evidence">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-num">03 — What you see</div>
+        <h2 class="section-title">Answers come with their own evidence table</h2>
+      </div>
+      <p class="section-note">The same categories a researcher would look for when appraising a paper — surfaced automatically.</p>
+    </div>
+
+    <div class="evidence-table">
+      <div class="evidence-cell">
+        <span class="tag">FINDINGS</span>
+        <h4>Key findings</h4>
+        <p>The central results across retrieved studies, stated plainly and separated from interpretation.</p>
+      </div>
+      <div class="evidence-cell">
+        <span class="tag">LIMITS</span>
+        <h4>Study limitations</h4>
+        <p>Sample size, study design, and constraints the original authors themselves acknowledged.</p>
+      </div>
+      <div class="evidence-cell">
+        <span class="tag">STRENGTH</span>
+        <h4>Evidence strength</h4>
+        <p>A rough read on how well-supported a claim is, based on the number and quality of studies behind it.</p>
+      </div>
+      <div class="evidence-cell">
+        <span class="tag">CONFLICT</span>
+        <h4>Conflicting results</h4>
+        <p>Where the literature disagrees, both sides are shown rather than averaged into a single answer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="history">
+  <div class="wrap history-wrap">
+    <div class="history-copy">
+      <div class="section-num">04 — Research history</div>
+      <h2 class="section-title" style="margin-top:6px;">Come back to what you found</h2>
+      <p>Signed-in users keep a running record of past questions, retrieved sources, and evidence ratings — so a search you ran last month is still there when you need it again.</p>
+      <a href="#" class="btn-text">Create an account</a>
+    </div>
+    <div class="history-panel">
+      <div class="history-row">
+        <span class="history-q">GLP-1 agonists and long-term renal outcomes</span>
+        <span class="history-meta"><span class="strength-dot strong"></span>Strong</span>
+      </div>
+      <div class="history-row">
+        <span class="history-q">Statin use and new-onset diabetes risk</span>
+        <span class="history-meta"><span class="strength-dot mixed"></span>Mixed</span>
+      </div>
+      <div class="history-row">
+        <span class="history-q">SSRIs during pregnancy — cardiac malformation risk</span>
+        <span class="history-meta"><span class="strength-dot limited"></span>Limited</span>
+      </div>
+      <div class="history-row">
+        <span class="history-q">Intermittent fasting and inflammatory markers</span>
+        <span class="history-meta"><span class="strength-dot mixed"></span>Mixed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="disclaimer">
+  <div class="wrap disclaimer-row">
+    <span class="disclaimer-mark">!</span>
+    <div class="disclaimer-text">
+      <p><strong>Research tool only.</strong> MedResearch AI is not a medical device, diagnostic system, or substitute for a qualified healthcare professional. It is built to help you read the literature faster — it should not be used to make clinical decisions or provide individualized medical advice.</p>
+    </div>
+  </div>
+</div>
+
+<section class="closing">
+  <div class="wrap closing-inner">
+    <h2 class="closing-title">Start from the literature, not a hunch.</h2>
+    <p>Ask your first research question and see the sources behind the answer.</p>
+    <a href="#" class="btn-primary">Start a search</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <span class="footer-brand">MEDRESEARCH AI — BUILT WITH DJANGO</span>
+    <div class="footer-links">
+      <a href="#how">How it works</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

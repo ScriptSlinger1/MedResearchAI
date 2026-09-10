@@ -561,6 +561,18 @@
     }
   })();
 </script>
+{% if articles %}
+    <h2>Evidence Ranking</h2>
 
+    {% for article in articles %}
+        <p>
+            <strong>{{ article.evidence_score }}</strong>
+            — {{ article.title }}
+            <br>
+            Publication types:
+            {{ article.publication_types|join:", " }}
+        </p>
+    {% endfor %}
+{% endif %}
 </body>
 </html>

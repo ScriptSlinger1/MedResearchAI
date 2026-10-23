@@ -5,6 +5,6 @@ from .views import (LandingPageView,
 app_name = 'mysite'
 
 urlpatterns = [
-    path('home/', LandingPageView.as_view(), name='test' ),
-    path('research/', research_page_view, name='test' ),
+    path('home/', LandingPageView.as_view(), name='home' ),
+    path('research/', research_page_view, name='research' ),
 ]

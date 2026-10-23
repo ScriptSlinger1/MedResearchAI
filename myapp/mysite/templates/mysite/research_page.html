@@ -18,8 +18,12 @@
     --rule-strong:#9FA091;
     --teal:#2F6E5F;
     --teal-deep:#1F4A40;
+    --teal-tint:#E3EEE9;
     --amber:#AD6B2C;
+    --amber-deep:#7A4A18;
+    --amber-tint:#F3E6D6;
     --red-flag:#9A4630;
+    --red-tint:#F4E3DD;
   }
   *{box-sizing:border-box;}
   body{
@@ -31,10 +35,11 @@
   }
   ::selection{background:var(--teal);color:var(--paper);}
   a{color:inherit;}
-  a:focus-visible, button:focus-visible, input:focus-visible{
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible{
     outline:2px solid var(--teal);
     outline-offset:3px;
   }
+  [hidden]{display:none !important;}
   .wrap{max-width:760px;margin:0 auto;padding:0 40px;}
   @media (max-width:600px){.wrap{padding:0 20px;}}
 
@@ -95,7 +100,7 @@
     border:1px solid var(--rule);
     border-radius:4px;
     overflow:hidden;
-    margin-bottom:44px;
+    margin-bottom:20px;
   }
   .query-head{
     display:flex;
@@ -126,6 +131,7 @@
   }
   input[name="med_question"]{
     flex:1;
+    min-width:0;
     font-family:'Source Serif 4', serif;
     font-size:16px;
     color:var(--ink);
@@ -135,9 +141,7 @@
     padding:13px 14px;
   }
   input[name="med_question"]::placeholder{color:var(--rule-strong);font-style:italic;}
-  input[name="med_question"]:focus{
-    border-color:var(--teal);
-  }
+  input[name="med_question"]:focus{border-color:var(--teal);}
   #med_question_btn{
     font-family:'IBM Plex Sans', sans-serif;
     font-size:15px;
@@ -147,13 +151,60 @@
     border:none;
     border-radius:3px;
     padding:0 22px;
+    min-height:46px;
     cursor:pointer;
     transition:background .15s ease;
   }
   #med_question_btn:hover{background:#153B33;}
+  #med_question_btn:disabled{background:var(--ink-soft);cursor:progress;}
   @media (max-width:520px){
     .query-row{flex-direction:column;}
   }
+
+  .search-status{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:0 0 20px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .search-status .bar{
+    flex:none;
+    width:84px;
+    height:4px;
+    background:var(--paper-warm);
+    border:1px solid var(--rule);
+    border-radius:3px;
+    overflow:hidden;
+    position:relative;
+  }
+  .search-status .bar::after{
+    content:"";
+    position:absolute;
+    top:0;bottom:0;
+    width:34%;
+    background:var(--teal);
+    animation:slide 1.2s ease-in-out infinite;
+  }
+  @keyframes slide{
+    0%{left:-34%;}
+    100%{left:100%;}
+  }
+
+  .error-card{
+    background:var(--red-tint);
+    border:1px solid var(--red-flag);
+    border-left-width:3px;
+    border-radius:4px;
+    padding:16px 20px;
+    margin:0 0 28px;
+    font-size:14.5px;
+    line-height:1.6;
+    color:var(--ink);
+  }
+  .error-card strong{color:var(--red-flag);}
 
   /* ---------- Answer ---------- */
   .answer-card{
@@ -161,7 +212,7 @@
     border:1px solid var(--rule);
     border-radius:4px;
     overflow:hidden;
-    margin-bottom:28px;
+    margin:24px 0 28px;
     position:relative;
   }
   .answer-card::before{
@@ -180,11 +231,7 @@
     border-bottom:1px solid var(--rule);
     background:var(--paper-warm);
   }
-  .answer-head-left{
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
+  .answer-head-left{display:flex;align-items:center;gap:8px;}
   .answer-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
   .answer-head-label{
     font-family:'IBM Plex Mono', monospace;
@@ -195,175 +242,382 @@
   .answer-timestamp{
     font-family:'IBM Plex Mono', monospace;
     font-size:11px;
-    color:var(--rule-strong);
+    color:var(--ink-soft);
   }
-  .answer-body{padding:30px 26px 24px 25px;}
+  .answer-body{padding:28px 26px 24px 25px;}
   .answer-eyebrow{
     font-family:'IBM Plex Mono', monospace;
     font-size:11.5px;
     color:var(--teal-deep);
     letter-spacing:0.02em;
-    margin-bottom:16px;
+    margin-bottom:18px;
     display:block;
   }
   .answer-text{
     font-family:'Source Serif 4', serif;
-    font-size:18px;
-    line-height:1.75;
+    font-size:17.5px;
+    line-height:1.7;
     color:var(--ink);
-    max-width:60ch;
+    max-width:62ch;
   }
-  .answer-text p{margin:0 0 18px;}
-  .answer-text strong{
-    font-weight:600;
-    color:var(--teal-deep);
-  }
+  .answer-text p{margin:0 0 14px;}
   .answer-text p:last-child{margin-bottom:0;}
-  .answer-text p:first-of-type::first-letter{
-    font-size:2.9em;
-    font-weight:600;
-    float:left;
-    line-height:0.85;
-    padding-right:8px;
-    padding-top:4px;
+  .answer-text strong{font-weight:600;color:var(--teal-deep);}
+  .answer-text ul, .answer-text ol{margin:0 0 6px;padding-left:1.3em;}
+  .answer-text li{margin-bottom:10px;font-size:16.5px;line-height:1.65;}
+  .ans-section{margin:0 0 24px;}
+  .ans-section:last-child{margin-bottom:0;}
+  .ans-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    font-weight:500;
+    letter-spacing:0.07em;
+    text-transform:uppercase;
     color:var(--teal-deep);
+    margin:0 0 8px;
   }
+  .ans-answer p{font-size:19.5px;line-height:1.6;}
+  .ans-bottom-line{
+    background:var(--paper-warm);
+    border-left:3px solid var(--teal);
+    border-radius:0 3px 3px 0;
+    padding:14px 18px;
+  }
+  .ans-bottom-line p{margin:0;font-weight:500;}
   .cite-link{
     font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
+    font-size:12px;
     color:var(--teal-deep);
-    background:var(--paper-warm);
+    background:var(--teal-tint);
     border:1px solid var(--teal);
     border-radius:8px;
-    padding:0 5px;
+    padding:0 6px;
     text-decoration:none;
-    vertical-align:super;
     margin:0 1px;
     white-space:nowrap;
     transition:background .15s ease, color .15s ease;
   }
   .cite-link:hover{background:var(--teal);color:var(--paper);}
   .answer-footer{
-    display:flex;
-    align-items:center;
-    gap:10px;
     margin-top:24px;
-    padding-top:18px;
+    padding-top:16px;
     border-top:1px dashed var(--rule);
     font-family:'IBM Plex Mono', monospace;
     font-size:11.5px;
+    line-height:1.6;
     color:var(--ink-soft);
   }
-  .answer-footer a{
-    color:var(--teal-deep);
-    text-decoration:none;
-    border-bottom:1px solid var(--teal);
+
+  /* ---------- Papers section ---------- */
+  .papers-section{margin-top:44px;}
+  .papers-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:6px 16px;
+    margin-bottom:14px;
   }
-  .answer-footer a:hover{color:var(--teal-deep);}
-  .paper-item.is-highlighted{
-    background:var(--paper-warm);
-    transition:background 1.4s ease;
+  .papers-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:500;
+    font-size:24px;
+    margin:0;
+  }
+  .papers-summary{
+    margin:0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
   }
 
-  /* ---------- Toggle button ---------- */
-  .papers-toggle{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    background:none;
-    border:1px solid var(--rule-strong);
-    border-radius:3px;
-    padding:11px 18px;
-    font-family:'IBM Plex Sans', sans-serif;
-    font-size:14.5px;
+  details.howto{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    padding:0 16px;
+    margin-bottom:18px;
+  }
+  details.howto summary{padding:12px 0;}
+  details.howto ul{
+    margin:0 0 14px;
+    padding-left:1.2em;
+    font-size:13.5px;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+  details.howto li{margin-bottom:6px;}
+  details.howto li strong{color:var(--ink);font-weight:500;}
+
+  summary{
+    list-style:none;
+    cursor:pointer;
+    font-size:13.5px;
     font-weight:500;
     color:var(--ink);
-    cursor:pointer;
-    transition:border-color .15s ease, background .15s ease;
-    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
   }
-  .papers-toggle:hover{
-    border-color:var(--teal);
-    background:var(--paper-warm);
-  }
-  .papers-toggle .count{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    color:var(--teal-deep);
-    background:var(--card);
-    border:1px solid var(--teal);
-    border-radius:10px;
-    padding:1px 8px;
-  }
-  .papers-toggle .chevron{
-    display:inline-block;
-    width:8px;height:8px;
+  summary::-webkit-details-marker{display:none;}
+  summary::before{
+    content:"";
+    flex:none;
+    width:6px;height:6px;
     border-right:1.5px solid var(--ink-soft);
     border-bottom:1.5px solid var(--ink-soft);
-    transform:rotate(45deg);
+    transform:rotate(-45deg);
     transition:transform .15s ease;
   }
-  .papers-toggle[aria-expanded="true"] .chevron{
-    transform:rotate(-135deg);
-  }
+  details[open] > summary::before{transform:rotate(45deg);}
 
-  /* ---------- Papers list ---------- */
-  #papers-panel{
-    margin-top:24px;
-    border-top:1px solid var(--rule);
-    padding-top:8px;
+  .filter-bar{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin-bottom:6px;
   }
-  #papers-panel[hidden]{display:none;}
-  .paper-item{
-    padding:22px 0;
-    border-bottom:1px solid var(--rule);
+  .filter-chip, .tool-btn{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:13px;
+    font-weight:500;
+    color:var(--ink);
+    background:var(--card);
+    border:1px solid var(--rule-strong);
+    border-radius:16px;
+    padding:6px 13px;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
   }
-  .paper-item:last-child{border-bottom:none;}
-  .paper-index{
+  .filter-chip:hover, .tool-btn:hover{border-color:var(--teal);background:var(--paper-warm);}
+  .filter-chip[aria-pressed="true"]{
+    background:var(--teal-deep);
+    border-color:var(--teal-deep);
+    color:var(--paper);
+  }
+  .chip-count{
     font-family:'IBM Plex Mono', monospace;
     font-size:11.5px;
-    color:var(--teal-deep);
-    display:block;
-    margin-bottom:8px;
+    margin-left:4px;
+    opacity:0.85;
   }
+  .tool-btn{margin-left:auto;border-radius:3px;font-size:12.5px;}
+
+  .papers-empty{
+    font-size:14px;
+    color:var(--ink-soft);
+    font-style:italic;
+    padding:22px 0;
+  }
+
+  /* ---------- Paper card ---------- */
+  .paper-item{
+    --cat:var(--rule-strong);
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--cat);
+    border-radius:4px;
+    padding:18px 20px 12px;
+    margin-top:12px;
+    transition:box-shadow .3s ease;
+  }
+  .paper-item[data-key="direct"]{--cat:var(--teal);}
+  .paper-item[data-key="related"]{--cat:var(--amber);}
+  .paper-item[data-key="background"]{--cat:var(--rule-strong);}
+  .paper-item[data-status="failed"]{--cat:var(--red-flag);}
+  .paper-item.is-highlighted{box-shadow:0 0 0 2px var(--teal);}
+
+  .paper-top{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  .paper-index{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    font-weight:500;
+    color:var(--ink-soft);
+    margin-right:2px;
+  }
+  .pill{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    line-height:1.5;
+    padding:1px 9px;
+    border-radius:10px;
+    border:1px solid var(--rule-strong);
+    color:var(--ink-soft);
+    background:var(--paper-warm);
+    white-space:nowrap;
+  }
+  .pill-used{background:var(--teal-deep);border-color:var(--teal-deep);color:var(--paper);}
+  .pill-direct{background:var(--teal-tint);border-color:var(--teal);color:var(--teal-deep);}
+  .pill-related{background:var(--amber-tint);border-color:var(--amber);color:var(--amber-deep);}
+  .pill-off_topic, .pill-uncertain, .pill-not_assessed{background:transparent;border-style:dashed;}
+  .pill-failed{background:var(--red-tint);border-color:var(--red-flag);color:var(--red-flag);}
+  .pill-protocol{background:var(--amber-tint);border-color:var(--amber);color:var(--amber-deep);}
+
   .paper-title{
     font-family:'Source Serif 4', serif;
     font-weight:500;
-    font-size:17px;
+    font-size:17.5px;
     line-height:1.4;
-    margin:0 0 10px;
+    margin:0 0 8px;
   }
+  .paper-title a{text-decoration:none;border-bottom:1px solid transparent;}
+  .paper-title a:hover{border-bottom-color:var(--teal);}
   .paper-meta{
     display:flex;
     flex-wrap:wrap;
-    gap:6px 16px;
+    gap:2px 14px;
     font-size:12.5px;
+    line-height:1.5;
     color:var(--ink-soft);
-    margin-bottom:12px;
+    margin-bottom:14px;
   }
-  .paper-meta span strong{
-    color:var(--ink);
-    font-weight:500;
-  }
+  .paper-meta strong{color:var(--ink);font-weight:500;}
   .paper-meta a{
     color:var(--teal-deep);
     text-decoration:none;
     border-bottom:1px solid var(--teal);
   }
-  .paper-meta a:hover{color:var(--teal-deep);}
-  .paper-abstract{
-    font-size:14px;
-    line-height:1.65;
+
+  .rank-strip{
+    display:grid;
+    grid-template-columns:1.5fr 0.7fr 1.5fr;
+    gap:14px 20px;
+    padding:12px 14px;
+    background:var(--paper);
+    border:1px solid var(--rule);
+    border-radius:3px;
+    margin-bottom:6px;
+  }
+  @media (max-width:560px){
+    .rank-strip{grid-template-columns:1fr 1fr;}
+    .rank-strip .metric:first-child{grid-column:1 / -1;}
+  }
+  .metric-label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
     color:var(--ink-soft);
-    margin:0;
-    max-width:64ch;
+    margin-bottom:5px;
+  }
+  .metric-value{
+    font-size:14px;
+    font-weight:500;
+    color:var(--ink);
+    line-height:1.35;
+  }
+  .metric-value small{
+    font-weight:400;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .score-row{display:flex;align-items:center;gap:10px;}
+  .score-track{
+    flex:1;
+    height:7px;
+    background:var(--paper-warm);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .score-fill{display:block;height:100%;background:var(--cat);}
+  .score-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    font-weight:500;
+    white-space:nowrap;
+  }
+  .unranked-note{
+    margin:0 0 6px;
+    padding:10px 14px;
+    font-size:13px;
+    line-height:1.55;
+    color:var(--ink-soft);
+    background:var(--paper);
+    border:1px dashed var(--rule-strong);
+    border-radius:3px;
   }
 
-  /* ---------- Empty state ---------- */
-  .empty-note{
-    font-size:14px;
+  .paper-detail{border-top:1px dashed var(--rule);padding:10px 0;}
+  .paper-detail:first-of-type{margin-top:10px;}
+  .detail-body{
+    padding:12px 0 2px 16px;
+    font-size:13.5px;
+    line-height:1.65;
     color:var(--ink-soft);
-    font-style:italic;
+  }
+  .detail-body ul{margin:0 0 10px;padding-left:1.2em;}
+  .detail-body li{margin-bottom:4px;}
+  .detail-label{
+    margin:10px 0 4px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .detail-label:first-child{margin-top:0;}
+  .type-tags{margin:0;display:flex;flex-wrap:wrap;gap:6px;}
+  .type-tag{
+    font-size:12px;
+    padding:1px 8px;
+    border:1px solid var(--rule);
+    border-radius:3px;
+    background:var(--paper);
+  }
+  .paper-abstract{max-width:66ch;}
+  .paper-abstract p{margin:0 0 10px;}
+  .paper-abstract p:last-child{margin-bottom:0;}
+  .paper-abstract strong{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--teal-deep);
+    font-weight:500;
+    margin-right:6px;
+  }
+
+  /* ---------- Search details ---------- */
+  details.search-details{
+    margin-top:28px;
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:4px;
+    padding:0 16px;
+  }
+  details.search-details summary{padding:12px 0;}
+  .search-details .detail-body{padding-left:0;}
+  .search-details code{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    line-height:1.55;
+    color:var(--ink);
+    background:var(--paper);
+    border:1px solid var(--rule);
+    border-radius:3px;
+    padding:8px 10px;
+    margin-bottom:8px;
+    overflow-wrap:anywhere;
+  }
+  .timing-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 18px;
+    margin:0 0 12px;
+    padding:0;
+    list-style:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
   }
 
   /* ---------- Disclaimer ---------- */
@@ -395,6 +649,7 @@
 
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;}
+    .search-status .bar::after{animation:none;left:0;width:100%;}
   }
 </style>
 </head>
@@ -418,7 +673,7 @@
     <div class="eyebrow-line"><span class="rule"></span>New query</div>
     <h1 class="page-title">Ask a medical research question</h1>
 
-    <form method="post">
+    <form method="post" id="query-form">
       {% csrf_token %}
       <div class="query-card">
         <div class="query-head">
@@ -428,151 +683,557 @@
         <div class="query-body">
           <label class="field-label" for="id_med_question">QUESTION</label>
           <div class="query-row">
-            <input id="id_med_question" name="med_question" type="text" placeholder="e.g. Does metformin reduce cardiovascular risk in non-diabetic patients?">
+            <input id="id_med_question" name="med_question" type="text" maxlength="4000" value="{{ request.POST.med_question|default:'' }}" placeholder="e.g. Does metformin reduce cardiovascular risk in non-diabetic patients?">
             <button type="submit" id="med_question_btn">Search</button>
           </div>
         </div>
       </div>
+      <p class="search-status" id="search-status" role="status" hidden>
+        <span class="bar" aria-hidden="true"></span>
+        Searching PubMed and ranking papers. This can take up to half a minute.
+      </p>
+    </form>
 
-      {% if response %}
-      <div class="answer-card">
-        <div class="answer-head">
-          <div class="answer-head-left">
-            <span class="answer-dot"></span>
-            <span class="answer-head-label">answer.md</span>
-          </div>
-          <span class="answer-timestamp">{% now "M j, Y — g:i A" %}</span>
-        </div>
-        <div class="answer-body">
-          <span class="answer-eyebrow">SYNTHESIZED FROM {{ articles|length|default:"0" }} SOURCE{{ articles|length|pluralize }}</span>
-          <div class="answer-text" id="answer-text">{{ response|linebreaks }}</div>
+    {% if error %}
+    <div class="error-card" role="alert">
+      <strong>Something went wrong.</strong> {{ error }}
+    </div>
+    {% endif %}
 
-          {% if articles %}
-          <div class="answer-footer">
-            <span>Every numbered marker links to its source below.</span>
-          </div>
-          {% endif %}
+    {% if response %}
+    <div class="answer-card">
+      <div class="answer-head">
+        <div class="answer-head-left">
+          <span class="answer-dot"></span>
+          <span class="answer-head-label">answer.md</span>
         </div>
+        <span class="answer-timestamp">{% now "M j, Y — g:i A" %}</span>
+      </div>
+      <div class="answer-body">
+        <span class="answer-eyebrow">
+          {% if articles_for_synthesis %}SYNTHESIZED FROM {{ articles_for_synthesis|length }} OF {{ articles|length }} RETRIEVED PAPER{{ articles|length|pluralize }}
+          {% elif route == "research" %}NO PAPERS MET THE RELEVANCE THRESHOLD
+          {% elif route == "personal_health" %}GENERAL HEALTH INFORMATION · NOT A DIAGNOSIS
+          {% else %}GENERAL MEDICAL KNOWLEDGE · NO LITERATURE SEARCH{% endif %}
+        </span>
+
+        {# Server-rendered fallback; the script below replaces it with a structured layout. #}
+        <div class="answer-text" id="answer-text">{{ response|linebreaks }}</div>
+        {{ response|json_script:"answer-raw" }}
+
+        {% if articles_for_synthesis %}
+        <div class="answer-footer">
+          PMIDs in the text link to the matching paper in the list below. Rankings are based on titles and abstracts only.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if articles %}
+    <section class="papers-section" id="papers-section" aria-labelledby="papers-heading">
+      <div class="papers-head">
+        <h2 class="papers-title" id="papers-heading">Research papers</h2>
+        <p class="papers-summary" id="papers-summary">{{ articles|length }} retrieved</p>
       </div>
 
-      {% if articles %}
-      <button type="button" class="papers-toggle" id="papers-toggle" aria-expanded="false" aria-controls="papers-panel">
-        <span class="chevron"></span>
-        Show research papers
-        <span class="count">{{ articles|length }}</span>
-      </button>
+      <details class="howto">
+        <summary>How to read these rankings</summary>
+        <ul>
+          <li><strong>Relevance score (0–100)</strong> shows how closely a paper matches your exact question: the population, the exposure or treatment, and the outcome. It is <em>not</em> a measure of study quality or of whether a treatment works.</li>
+          <li><strong>Direct</strong> papers match the key elements of your question. <strong>Related</strong> papers match an important part but differ in population, intervention or outcome. <strong>Background</strong> papers give context only.</li>
+          <li><strong>Confidence</strong> is how sure the AI is about its relevance rating. It is lower when the abstract is short or missing.</li>
+          <li><strong>Used in answer</strong> marks the papers the written answer draws on. Protocols without results and papers with a low relevance score are left out of the answer, though you can still read them here.</li>
+          <li>All assessments use titles and abstracts only. Check the full paper before relying on a result.</li>
+        </ul>
+      </details>
 
-      <div id="papers-panel" hidden>
+      <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter papers" hidden>
+        <button type="button" class="filter-chip" data-filter="used" aria-pressed="false">Used in answer<span class="chip-count"></span></button>
+        <button type="button" class="filter-chip" data-filter="direct" aria-pressed="false">Direct<span class="chip-count"></span></button>
+        <button type="button" class="filter-chip" data-filter="related" aria-pressed="false">Related<span class="chip-count"></span></button>
+        <button type="button" class="filter-chip" data-filter="other" aria-pressed="false">Background &amp; off-topic<span class="chip-count"></span></button>
+        <button type="button" class="filter-chip" data-filter="unassessed" aria-pressed="false">Not assessed<span class="chip-count"></span></button>
+        <button type="button" class="filter-chip" data-filter="all" aria-pressed="false">All<span class="chip-count"></span></button>
+        <button type="button" class="tool-btn" id="toggle-all">Expand all</button>
+      </div>
+
+      <p class="papers-empty" id="papers-empty" hidden>No papers match this filter.</p>
+
+      <div class="paper-list" id="paper-list">
         {% for article in articles %}
-        <div class="paper-item" id="paper-{{ forloop.counter }}">
-          <span class="paper-index">{{ forloop.counter }}</span>
-          <h3 class="paper-title">{{ article.title }}</h3>
-          <div class="paper-meta">
-            <span><strong>Journal:</strong> {{ article.journal }}</span>
-            <span><strong>Authors:</strong> {{ article.authors|join:", " }}</span>
-            <span><strong>PMID:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/{{ article.pmid }}/" target="_blank" rel="noopener">{{ article.pmid }}</a></span>
+        {% with key=article.relevance_key|default:"not_assessed" %}
+        <article class="paper-item" id="paper-{{ article.pmid|default:forloop.counter }}" data-pmid="{{ article.pmid|default:'' }}" data-key="{{ key }}" data-status="{{ article.ranking_status|default:'skipped' }}">
+
+          <div class="paper-top">
+            <span class="paper-index" title="Rank position">#{{ forloop.counter }}</span>
+            {% for used in articles_for_synthesis %}{% if used.pmid == article.pmid %}<span class="pill pill-used">Used in answer</span>{% endif %}{% endfor %}
+            {% if article.ranking_status == "failed" %}
+              <span class="pill pill-failed">Assessment failed</span>
+            {% else %}
+              <span class="pill pill-{{ key }}">{{ article.relevance_category|default:"Not assessed" }}</span>
+            {% endif %}
+            {% if article.ranking_status == "success" %}
+              {% if article.evidence_status == "results_reported" %}<span class="pill">Results reported</span>
+              {% elif article.evidence_status == "protocol_no_results" %}<span class="pill pill-protocol">Protocol, no results</span>
+              {% elif article.evidence_status == "review" %}<span class="pill">Review</span>
+              {% elif article.evidence_status == "mechanistic" %}<span class="pill">Mechanistic</span>
+              {% else %}<span class="pill">Evidence type unclear</span>{% endif %}
+            {% endif %}
           </div>
-          <p class="paper-abstract">{{ article.abstract }}</p>
-        </div>
+
+          <h3 class="paper-title">
+            {% if article.pmid %}<a href="https://pubmed.ncbi.nlm.nih.gov/{{ article.pmid }}/" target="_blank" rel="noopener">{{ article.title|default:"Untitled record" }}</a>{% else %}{{ article.title|default:"Untitled record" }}{% endif %}
+          </h3>
+
+          <div class="paper-meta">
+            {% if article.journal %}<span><strong>Journal:</strong> {{ article.journal }}{% if article.year %} ({{ article.year }}){% endif %}</span>{% endif %}
+            {% if article.authors %}<span><strong>Authors:</strong> {{ article.authors|slice:":3"|join:", " }}{% if article.authors|length > 3 %} et al.{% endif %}</span>{% endif %}
+            {% if article.pmid %}<span><strong>PMID:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/{{ article.pmid }}/" target="_blank" rel="noopener">{{ article.pmid }}</a></span>{% endif %}
+          </div>
+
+          {% if article.ranking_status == "success" %}
+          <div class="rank-strip">
+            <div class="metric">
+              <span class="metric-label">Relevance to your question</span>
+              <div class="score-row">
+                <span class="score-track" role="img" aria-label="Relevance score {{ article.ai_rank_score }} out of 100"><span class="score-fill" style="width:{{ article.ai_rank_score }}%"></span></span>
+                <span class="score-num">{{ article.ai_rank_score }}<small>/100</small></span>
+              </div>
+            </div>
+            <div class="metric">
+              <span class="metric-label" title="How sure the AI is about the relevance rating, not whether the treatment works">Confidence</span>
+              <span class="metric-value">{{ article.ranking_confidence|floatformat:2 }}</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Study design (AI-detected)</span>
+              <span class="metric-value">{{ article.detected_study_design|default:"Not reported" }}</span>
+            </div>
+          </div>
+          {% else %}
+          <p class="unranked-note">{{ article.ranking_reasons.0|default:"This paper was not given a relevance score." }}</p>
+          {% endif %}
+
+          <details class="paper-detail">
+            <summary>{% if article.ranking_status == "success" %}Why this ranking{% else %}Why there is no ranking{% endif %}</summary>
+            <div class="detail-body">
+              {% if article.ranking_status == "success" %}
+                <p class="detail-label">Reasoning</p>
+                <ul>{% for reason in article.ranking_reasons %}<li>{{ reason }}</li>{% endfor %}</ul>
+                {% if article.ranking_limitations %}
+                <p class="detail-label">Limitations</p>
+                <ul>{% for limitation in article.ranking_limitations %}<li>{{ limitation }}</li>{% endfor %}</ul>
+                {% endif %}
+              {% else %}
+                <ul>{% for reason in article.ranking_reasons %}<li>{{ reason }}</li>{% endfor %}</ul>
+              {% endif %}
+              {% if article.publication_types %}
+              <p class="detail-label">PubMed publication types</p>
+              <p class="type-tags">{% for t in article.publication_types %}<span class="type-tag">{{ t }}</span>{% endfor %}</p>
+              {% endif %}
+            </div>
+          </details>
+
+          <details class="paper-detail">
+            <summary>Abstract</summary>
+            <div class="detail-body paper-abstract">{{ article.abstract|default:"No abstract available." }}</div>
+          </details>
+
+        </article>
+        {% endwith %}
         {% endfor %}
       </div>
-      {% else %}
-      <p class="empty-note">No supporting papers were returned for this answer.</p>
-      {% endif %}
+    </section>
+    {% endif %}
 
-      <div class="disclaimer">
-        <span class="disclaimer-mark">!</span>
-        <p><strong>Research tool only.</strong> This is not a medical device or a substitute for a qualified healthcare professional. Do not use it to make clinical decisions.</p>
+    {% if queries %}
+    <details class="search-details">
+      <summary>How this answer was produced</summary>
+      <div class="detail-body">
+        <p class="detail-label">PubMed searches ({{ codes|length }} unique records found)</p>
+        {% for q in queries %}<code>{{ q }}</code>{% endfor %}
+        {% if timings %}
+        <p class="detail-label">Time per stage (seconds)</p>
+        <ul class="timing-list">
+          {% for stage, secs in timings.items %}<li>{{ stage }}: {{ secs }}</li>{% endfor %}
+        </ul>
+        {% endif %}
       </div>
-      {% endif %}
-    </form>
+    </details>
+    {% endif %}
+
+    {% if response %}
+    <div class="disclaimer">
+      <span class="disclaimer-mark">!</span>
+      <p><strong>Research tool only.</strong> This is not a medical device or a substitute for a qualified healthcare professional. Do not use it to make clinical decisions.</p>
+    </div>
+    {% endif %}
   </div>
 </main>
 
 <script>
-  (function(){
-    var toggle = document.getElementById('papers-toggle');
-    var panel = document.getElementById('papers-panel');
+(function(){
+  'use strict';
 
-    function openPanel(){
-      if(!toggle || !panel) return;
-      toggle.setAttribute('aria-expanded', 'true');
-      panel.hidden = false;
-      toggle.childNodes[2].nodeValue = ' Hide research papers ';
+  /* PURE:START (no DOM access in this block) */
+
+  var HEADER_RE = /^(answer|evidence|limitations?|bottom line)[\s*_]*(?::|$)\s*(.*)$/i;
+  var LABELS = {
+    'answer': 'Answer',
+    'evidence': 'Evidence',
+    'limitation': 'Limitations',
+    'limitations': 'Limitations',
+    'bottom line': 'Bottom line'
+  };
+
+  function sectionKey(label){
+    if(!label) return null;
+    if(label.indexOf('limit') === 0) return 'limitations';
+    return label.replace(' ', '-');
+  }
+
+  // Split text into plain text, **bold**, and links to known PMIDs.
+  function inlineTokens(text, known){
+    function linked(str){
+      var res = [], re = /\b\d{5,9}\b/g, pos = 0, m;
+      while((m = re.exec(str))){
+        if(!known[m[0]]) continue;
+        if(m.index > pos) res.push({t:'text', v:str.slice(pos, m.index)});
+        res.push({t:'cite', v:m[0]});
+        pos = m.index + m[0].length;
+      }
+      if(pos < str.length) res.push({t:'text', v:str.slice(pos)});
+      return res;
     }
-
-    if(toggle && panel){
-      toggle.addEventListener('click', function(){
-        var expanded = toggle.getAttribute('aria-expanded') === 'true';
-        toggle.setAttribute('aria-expanded', String(!expanded));
-        panel.hidden = expanded;
-        toggle.childNodes[2].nodeValue = expanded ? ' Show research papers ' : ' Hide research papers ';
-      });
+    var out = [], boldRe = /\*\*([^*]+?)\*\*/g, last = 0, b;
+    while((b = boldRe.exec(text))){
+      if(b.index > last){
+        out = out.concat(linked(text.slice(last, b.index).replace(/\*\*/g, '')));
+      }
+      out.push({t:'strong', kids:linked(b[1])});
+      last = b.index + b[0].length;
     }
+    if(last < text.length){
+      out = out.concat(linked(text.slice(last).replace(/\*\*/g, '')));
+    }
+    return out;
+  }
 
-    // Turn [1], [2]... markers inside the answer text into links to their source.
-    var answer = document.getElementById('answer-text');
-    if(answer){
-      // Convert markdown-style **bold** into real <strong> emphasis, and drop any
-      // leftover stray "**" that isn't part of a matched pair.
-      answer.innerHTML = answer.innerHTML
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*\*/g, '');
+  function parseBlocks(lines, known){
+    var blocks = [], para = null, list = null;
+    lines.forEach(function(line){
+      var t = line.trim();
+      if(!t){ para = null; list = null; return; }
 
-      var walker = document.createTreeWalker(answer, NodeFilter.SHOW_TEXT, null);
-      var textNodes = [];
-      var node;
-      while((node = walker.nextNode())) textNodes.push(node);
-
-      textNodes.forEach(function(textNode){
-        var text = textNode.nodeValue;
-        if(!/\[\d+\]/.test(text)) return;
-
-        var frag = document.createDocumentFragment();
-        var lastIndex = 0;
-        var re = /\[(\d+)\]/g;
-        var match;
-        while((match = re.exec(text))){
-          var target = document.getElementById('paper-' + match[1]);
-          if(target){
-            frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
-            var link = document.createElement('a');
-            link.className = 'cite-link';
-            link.href = '#paper-' + match[1];
-            link.textContent = match[1];
-            link.addEventListener('click', function(e){
-              e.preventDefault();
-              var id = this.getAttribute('href').slice(1);
-              var el = document.getElementById(id);
-              if(!el) return;
-              openPanel();
-              var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-              el.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'center'});
-              el.classList.add('is-highlighted');
-              setTimeout(function(){ el.classList.remove('is-highlighted'); }, 1600);
-            });
-            frag.appendChild(link);
-            lastIndex = match.index + match[0].length;
-          }
+      var b = /^(?:([-*\u2022])|(\d+)[.)])\s+(.*)$/.exec(t);
+      if(b){
+        var type = b[1] ? 'ul' : 'ol';
+        if(!list || list.type !== type){
+          list = {type:type, items:[]};
+          blocks.push(list);
         }
-        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
-        textNode.parentNode.replaceChild(frag, textNode);
+        list.items.push(inlineTokens(b[3], known));
+        para = null;
+        return;
+      }
+
+      // Indented line right after a list item: continuation of that item.
+      if(list && /^\s/.test(line)){
+        var lastItem = list.items[list.items.length - 1];
+        lastItem.push({t:'text', v:' '});
+        Array.prototype.push.apply(lastItem, inlineTokens(t, known));
+        return;
+      }
+
+      list = null;
+      if(!para){
+        para = {type:'p', tokens:[]};
+        blocks.push(para);
+      } else {
+        para.tokens.push({t:'text', v:' '});
+      }
+      Array.prototype.push.apply(para.tokens, inlineTokens(t, known));
+    });
+    return blocks;
+  }
+
+  // Turn the model's "Answer: ... Evidence: ..." text into sections.
+  function parseAnswer(raw, known){
+    var lines = String(raw).replace(/\r\n?/g, '\n').split('\n');
+    var sections = [], cur = {label:null, lines:[]};
+
+    function flush(){
+      var hasText = cur.lines.some(function(l){ return l.trim(); });
+      if(hasText || cur.label) sections.push(cur);
+    }
+
+    lines.forEach(function(line){
+      var clean = line.replace(/^[#>\s]*(?:\*\*|__)?/, '');
+      var h = HEADER_RE.exec(clean);
+      if(h){
+        flush();
+        var rest = h[2].replace(/^[*_\s]+/, '');
+        cur = {label:h[1].toLowerCase(), lines: rest ? [rest] : []};
+      } else {
+        cur.lines.push(line);
+      }
+    });
+    flush();
+
+    return sections.map(function(s){
+      return {
+        key: sectionKey(s.label),
+        label: s.label ? LABELS[s.label] : null,
+        blocks: parseBlocks(s.lines, known)
+      };
+    });
+  }
+
+  function titleCase(s){
+    return s.charAt(0) + s.slice(1).toLowerCase();
+  }
+
+  // "BACKGROUND: ... METHODS: ..." -> labelled parts.
+  function splitAbstract(text){
+    var re = /(^|\s)([A-Z][A-Z ,&\/-]{3,38}):\s+/g, marks = [], m;
+    while((m = re.exec(text))){
+      marks.push({start:m.index + m[1].length, end:m.index + m[0].length, label:m[2].trim()});
+    }
+    if(marks.length < 2) return [{label:null, text:text}];
+
+    var parts = [];
+    var intro = text.slice(0, marks[0].start).trim();
+    if(intro) parts.push({label:null, text:intro});
+    marks.forEach(function(mk, i){
+      var next = (i + 1 < marks.length) ? marks[i + 1].start : text.length;
+      parts.push({label:titleCase(mk.label), text:text.slice(mk.end, next).trim()});
+    });
+    return parts;
+  }
+
+  function matchesFilter(card, f){
+    switch(f){
+      case 'all': return true;
+      case 'used': return !!card.used;
+      case 'direct': return card.key === 'direct';
+      case 'related': return card.key === 'related';
+      case 'other':
+        return card.status === 'success' &&
+          ['background', 'off_topic', 'uncertain'].indexOf(card.key) !== -1;
+      case 'unassessed': return card.status !== 'success';
+    }
+    return false;
+  }
+
+  /* PURE:END */
+
+  function qsa(selector, root){
+    return Array.prototype.slice.call((root || document).querySelectorAll(selector));
+  }
+
+  var reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Search button feedback ----------
+  var form = document.getElementById('query-form');
+  var searchBtn = document.getElementById('med_question_btn');
+  var statusEl = document.getElementById('search-status');
+
+  function resetSearchState(){
+    if(searchBtn){ searchBtn.disabled = false; searchBtn.textContent = 'Search'; }
+    if(statusEl) statusEl.hidden = true;
+  }
+
+  if(form && searchBtn){
+    form.addEventListener('submit', function(){
+      var input = document.getElementById('id_med_question');
+      if(!input || !input.value.trim()) return;
+      searchBtn.disabled = true;
+      searchBtn.textContent = 'Searching\u2026';
+      if(statusEl) statusEl.hidden = false;
+    });
+    // Back/forward cache can restore the page mid-search.
+    window.addEventListener('pageshow', resetSearchState);
+  }
+
+  // ---------- Papers ----------
+  var cards = qsa('.paper-item');
+  var known = {};
+  cards.forEach(function(c){
+    if(c.getAttribute('data-pmid')) known[c.getAttribute('data-pmid')] = true;
+  });
+
+  function cardState(el){
+    return {
+      key: el.getAttribute('data-key'),
+      status: el.getAttribute('data-status'),
+      used: !!el.querySelector('.pill-used')
+    };
+  }
+
+  function openPaper(pmid){
+    var el = document.getElementById('paper-' + pmid);
+    if(!el) return;
+    if(el.hidden) setFilter('all');
+    el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'center'});
+    el.classList.add('is-highlighted');
+    setTimeout(function(){ el.classList.remove('is-highlighted'); }, 1800);
+  }
+
+  // ---------- Structured answer ----------
+  function makeCite(pmid){
+    var a = document.createElement('a');
+    a.className = 'cite-link';
+    a.href = '#paper-' + pmid;
+    a.textContent = pmid;
+    a.title = 'Jump to this paper';
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      openPaper(pmid);
+    });
+    return a;
+  }
+
+  function renderTokens(parent, tokens){
+    tokens.forEach(function(tok){
+      if(tok.t === 'text'){
+        parent.appendChild(document.createTextNode(tok.v));
+      } else if(tok.t === 'strong'){
+        var s = document.createElement('strong');
+        renderTokens(s, tok.kids);
+        parent.appendChild(s);
+      } else if(tok.t === 'cite'){
+        parent.appendChild(makeCite(tok.v));
+      }
+    });
+  }
+
+  function renderAnswer(){
+    var target = document.getElementById('answer-text');
+    var rawEl = document.getElementById('answer-raw');
+    if(!target || !rawEl) return;
+
+    var raw;
+    try { raw = JSON.parse(rawEl.textContent); } catch(e){ return; }
+    if(typeof raw !== 'string' || !raw.trim()) return;
+
+    var sections = parseAnswer(raw, known);
+    if(!sections.length) return;
+
+    target.textContent = '';
+    sections.forEach(function(sec){
+      var wrap = document.createElement('section');
+      wrap.className = 'ans-section' + (sec.key ? ' ans-' + sec.key : '');
+
+      if(sec.label){
+        var h = document.createElement('h3');
+        h.className = 'ans-label';
+        h.textContent = sec.label;
+        wrap.appendChild(h);
+      }
+
+      sec.blocks.forEach(function(block){
+        if(block.type === 'p'){
+          var p = document.createElement('p');
+          renderTokens(p, block.tokens);
+          wrap.appendChild(p);
+        } else {
+          var list = document.createElement(block.type);
+          block.items.forEach(function(tokens){
+            var li = document.createElement('li');
+            renderTokens(li, tokens);
+            list.appendChild(li);
+          });
+          wrap.appendChild(list);
+        }
+      });
+
+      target.appendChild(wrap);
+    });
+  }
+
+  // ---------- Abstract formatting ----------
+  function formatAbstracts(){
+    qsa('.paper-abstract').forEach(function(box){
+      var text = box.textContent.trim();
+      var parts = splitAbstract(text);
+      if(parts.length < 2) return;
+
+      box.textContent = '';
+      parts.forEach(function(part){
+        var p = document.createElement('p');
+        if(part.label){
+          var strong = document.createElement('strong');
+          strong.textContent = part.label;
+          p.appendChild(strong);
+        }
+        p.appendChild(document.createTextNode(part.text));
+        box.appendChild(p);
+      });
+    });
+  }
+
+  // ---------- Filters ----------
+  var filterBar = document.getElementById('filter-bar');
+  var chips = qsa('.filter-chip');
+  var emptyEl = document.getElementById('papers-empty');
+  var toggleAll = document.getElementById('toggle-all');
+
+  function setFilter(f){
+    var shown = 0;
+    cards.forEach(function(card){
+      var ok = matchesFilter(cardState(card), f);
+      card.hidden = !ok;
+      if(ok) shown++;
+    });
+    chips.forEach(function(chip){
+      chip.setAttribute('aria-pressed', String(chip.getAttribute('data-filter') === f));
+    });
+    if(emptyEl) emptyEl.hidden = shown !== 0;
+  }
+
+  function initFilters(){
+    if(!cards.length || !filterBar) return;
+
+    var counts = {};
+    chips.forEach(function(chip){
+      var f = chip.getAttribute('data-filter');
+      var n = cards.filter(function(card){
+        return matchesFilter(cardState(card), f);
+      }).length;
+      counts[f] = n;
+      chip.querySelector('.chip-count').textContent = ' ' + n;
+      if(n === 0 && f !== 'all') chip.hidden = true;
+      chip.addEventListener('click', function(){ setFilter(f); });
+    });
+
+    var assessed = cards.filter(function(c){ return c.getAttribute('data-status') === 'success'; }).length;
+    var summary = document.getElementById('papers-summary');
+    if(summary){
+      summary.textContent = cards.length + ' retrieved \u00B7 ' + assessed +
+        ' AI-assessed \u00B7 ' + (counts.used || 0) + ' used in the answer';
+    }
+
+    filterBar.hidden = false;
+    setFilter(counts.used > 0 ? 'used' : 'all');
+
+    if(toggleAll){
+      toggleAll.addEventListener('click', function(){
+        var expand = toggleAll.getAttribute('data-state') !== 'expanded';
+        cards.forEach(function(card){
+          if(card.hidden) return;
+          qsa('details', card).forEach(function(d){ d.open = expand; });
+        });
+        toggleAll.setAttribute('data-state', expand ? 'expanded' : 'collapsed');
+        toggleAll.textContent = expand ? 'Collapse all' : 'Expand all';
       });
     }
-  })();
-</script>
-{% if articles %}
-    <h2>Evidence Ranking</h2>
+  }
 
-    {% for article in articles %}
-        <p>
-            <strong>{{ article.evidence_score }}</strong>
-            — {{ article.title }}
-            <br>
-            Publication types:
-            {{ article.publication_types|join:", " }}
-        </p>
-    {% endfor %}
-{% endif %}
+  renderAnswer();
+  formatAbstracts();
+  initFilters();
+})();
+</script>
 </body>
 </html>
